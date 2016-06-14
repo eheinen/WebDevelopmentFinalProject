@@ -28,8 +28,8 @@ public class User {
 	@Column(name="CPF", nullable=false, unique=true)
 	private String cpf;
 	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="USERS_ID")
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="USERS_ID", unique=true)
 	private User friendId;
 	
 	public int getId() {

@@ -1,6 +1,9 @@
 package com.fiap.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fiap.entity.User;
 
@@ -24,10 +27,25 @@ public class Validation {
 		return true;
 	}
 	
-	public static boolean hasAnotherFriendChosen(List<User> users, User userChosen){
-		long qty = users.stream()
-			.filter(u -> u.getFriendId().getId() == userChosen.getId())
-			.count();
-		return qty > 0;
+	public static boolean hasAlreadyShuffle(User user){
+		if(user.getFriendId() != null)
+			return true;
+		return false;
+	}
+	
+	public static boolean hasNotAnotherFriendChosen(List<User> users, User userChosen){
+		boolean flag = false;
+		for(User user : users){
+			if(user.getFriendId() == null)
+				flag = true;
+			else
+				if(user.getFriendId().getId() == userChosen.getId()){
+					flag = false;
+					break;
+				}
+				else
+					flag = true;
+		}
+		return flag;
 	}
 }

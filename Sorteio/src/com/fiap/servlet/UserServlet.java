@@ -53,7 +53,7 @@ public class UserServlet extends HttpServlet {
 				request.setAttribute("msgError", "Desculpa não foi possivel efetuar o cadastro. Problemas com a conexão.");
 				e.printStackTrace();
 			}finally{
-				request.getRequestDispatcher("registerUser.jsp").forward(request, response);
+				response.sendRedirect("login.jsp");
 			}
 
 		}else {

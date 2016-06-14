@@ -32,13 +32,14 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String password = request.getParameter("password");
-		String name = request.getParameter("cpf");
+		String cpf = request.getParameter("cpf");
 
-		if(Validation.containData(password, name)){
+		if(Validation.containData(password, cpf)){
 			try {
 				GenericDao<User> dao = new GenericDao<>(User.class);
-				User user = dao.login(name, password);
+				User user = dao.login(cpf, password);
 				HttpSession session = request.getSession();
+				user.setFriendId(new User());
 				session.setAttribute("user", user);
 				request.getRequestDispatcher("sorteio.jsp").forward(request, response);
 				
@@ -46,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 
 			} catch (NoResultException e){
 				e.printStackTrace();
-				request.setAttribute("errorMsg", "Usu√°rio ou senha incorreto!");
+				request.setAttribute("errorMsg", "Usu·rio ou senha incorreto!");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 
 			}catch (Exception e) {

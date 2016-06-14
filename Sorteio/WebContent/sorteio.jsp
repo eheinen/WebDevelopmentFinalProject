@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Sorteio</title>
+<title>Sorteio de Usuário</title>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
@@ -25,6 +25,11 @@
 <body>
 
 	<div class="container">
+		<div class="col-md-6 col-md-offset-3" style="margin-top: 20px;">
+			<a href="login.jsp">Login</a> <br />
+			<a href="user">Cadastro de Usuário</a>
+		</div>
+		
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<h2>Sorteio :)</h2>
@@ -34,15 +39,11 @@
 						<p>${errorMsg}</p>
 					</div>
 				</c:if>
-				<form action="sorteio" method="post">
-					<div class="form-group">
-						<label for="amigo">Nome do Amiguinho!</label> 
-						<input type="text"
-							class="form-control" id="amigo" name="amigo"
-							value="${user.friendId.name}" disabled="disabled">
-					</div>
-					<input type="hidden" name="cpf" value="${user.cpf}" >
-
+				<div class="form-group">
+					<label for="amigo">Nome do Amiguinho!</label> 
+					<input type="text" class="form-control" id="amigo" value="${userFriend}" disabled="disabled">
+				</div>
+				<form action="sorteio" method="post">				
 					<button type="submit" class="btn btn-default">Sortear</button>
 				</form>
 

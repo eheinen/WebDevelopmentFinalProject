@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Cadastro de Usuário</title>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
@@ -23,7 +23,11 @@
 </head>
 <body>
 	<div class="container">
+		<div class="col-md-6 col-md-offset-3" style="margin-top: 20px;">
+			<a href="login.jsp">Login</a>
+		</div>
 		<div class="row">
+		
 			<div class="col-md-6 col-md-offset-3">
 				<h2>Cadastro de usuário</h2>
 				<br />
@@ -50,11 +54,7 @@
 							type="password" class="form-control" id="exampleInputPassword1"
 							name="password" value="${user.password}" placeholder="Senha" autocomplete="off">
 					</div>
-					<div class="checkbox">
-						<label> <input type="checkbox" name="admin">
-							Administrador
-						</label>
-					</div>
+
 					<button type="submit" class="btn btn-default">Cadastrar</button>
 				</form>
 

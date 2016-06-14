@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Autenticação</title>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
@@ -24,7 +24,7 @@
 </head>
 <body>
 
-	<div class="container">
+	<div class="container">		
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<h2>Autenticação</h2>

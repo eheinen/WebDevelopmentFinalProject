@@ -24,84 +24,61 @@ import com.fiap.util.Validation;
 public class SorteioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	public SorteioServlet() {
 		// TODO Auto-generated constructor stub
 	}
 
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doPost(request, response);
 	}
 
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User user = (User)request.getSession(false).getAttribute("user");
-		String cpf = (user).getCpf();
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		GenericDao<User> dao = new GenericDao<>(User.class);
-		List<User> users = dao.getAll();
-		List<User> newUsers = users.stream().filter(u -> !u.getCpf().equals(cpf))
-				.collect(Collectors.toCollection(ArrayList::new));	
-		while(newUsers.isEmpty()){		
-			Collections.shuffle(newUsers, new Random(System.nanoTime()));
-			User userChosen = newUsers.get(0);
-			if(Validation.hasAnotherFriendChosen(newUsers, userChosen)){
-				newUsers.remove(0);
-				continue;
-			}
-			else{
-				user.setFriendId(userChosen);
-				break;
-			}			
-		}
-		
-		if(newUsers.isEmpty()){
-			request.setAttribute("msgError", "Ops, todos os amiguinhos já foram escolhidos!");
+		User user = dao.findById(((User) request.getSession(false).getAttribute("user")).getId());
+		if (Validation.hasAlreadyShuffle(user)) {
+			request.setAttribute("errorMsg", "Você já escolheu o seu amiguinho!");
+			request.setAttribute("userFriend", user.getFriendId().getName());
 			request.getRequestDispatcher("sorteio.jsp").forward(request, response);
-		}
-		
-		try {
-			dao.update(user);
-			request.setAttribute("user.friendId.name", user.getFriendId().getName());
-			request.getRequestDispatcher("sorteio.jsp").forward(request, response);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		/*
-		if(Validation.containData(password, name, cpf)){
-			User user = new User();
-			try {
-				user.setPassword(password);
-				user.setName(name);
-				user.setCpf(cpf);
+		} else {
+			String cpf = (user).getCpf();
+			List<User> users = dao.getAll();
+			List<User> newUsers = users.stream().filter(u -> !u.getCpf().equals(cpf))
+					.collect(Collectors.toCollection(ArrayList::new));
+			Collections.shuffle(newUsers);
 
-				GenericDao<User> dao = new GenericDao<>(User.class);
-				dao.persist(user);
-				request.setAttribute("msg", "O usuário "+user.getName()+ " foi incluido com sucesso!");
-
-			} catch (Exception e) {
-				request.setAttribute("user", user);
-				request.setAttribute("msgError", "Desculpa não foi possivel efetuar o cadastro. Problemas com a conexão.");
-				e.printStackTrace();
-			}finally{
-				request.getRequestDispatcher("registerUser.jsp").forward(request, response);
+			for(int i=0; i < newUsers.size(); i++){				
+				User userChosen = newUsers.get(i);
+				if (!Validation.hasNotAnotherFriendChosen(newUsers, userChosen)) {
+					continue;
+				} else {
+					user.setFriendId(userChosen);
+					break;
+				}
 			}
 
-		}else {
-			request.setAttribute("msgError", "Favor preencher todos os campos");
-			request.getRequestDispatcher("registerUser.jsp").forward(request, response);
-		}*/
-
+			if (newUsers.isEmpty()) {
+				request.setAttribute("errorMsg", "Ops, todos os amiguinhos já foram escolhidos!");
+				request.getRequestDispatcher("sorteio.jsp").forward(request, response);
+			} else {
+				try {
+					dao.update(user);
+					request.setAttribute("userFriend", user.getFriendId().getName());
+					request.getRequestDispatcher("sorteio.jsp").forward(request, response);
+				} catch (Exception e) {
+					request.setAttribute("errorMsg", "Ops, todos os amiguinhos já foram escolhidos!");
+					request.getRequestDispatcher("sorteio.jsp").forward(request, response);
+				}
+			}
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 
